@@ -16,6 +16,7 @@ class LIFOCache(BaseCaching):
         """Assigns elements to the dictionary"""
         if key is None or item is None:
             return
+        self.cache_data[key] = item
         if len(self.cache_data) > BaseCaching.MAX_ITEMS:
             if self.queue:
                 last = self.queue.pop()
@@ -25,7 +26,6 @@ class LIFOCache(BaseCaching):
             self.queue.append(key)
         else:
             self.mv_last_list(key)
-        self.cache_data[key] = item
 
     def get(self, key):
         """Return the value of a key"""

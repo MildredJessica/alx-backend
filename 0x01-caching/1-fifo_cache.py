@@ -11,13 +11,15 @@ class FIFOCache(BaseCaching):
         """Constructor"""
         super().__init__()
         self.queue = []
- 
+
     def put(self, key, item):
         """Assigns elements to the dictionary"""
         if key is None or item is None:
             return
         if key not in self.queue:
             self.queue.append(key)
+        else:
+            self.mv_last_list(key)
         self.cache_data[key] = item
         if len(self.cache_data) > BaseCaching.MAX_ITEMS:
             first = self.get_first_list(self.queue)
@@ -29,6 +31,13 @@ class FIFOCache(BaseCaching):
     def get(self, key):
         """Return the value of a key"""
         return self.cache_data.get(key, None)
+
+    def mv_last_list(self, item):
+        """ Moves element to last idx of list """
+        length = len(self.queue)
+        if self.queue[length - 1] != item:
+            self.queue.remove(item)
+            self.queue.append(item)
 
     @staticmethod
     def get_first_list(array):
